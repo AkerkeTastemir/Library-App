@@ -2,10 +2,10 @@ package app;
 
 import app.controllers.interfaces.IBookController;
 import app.controllers.interfaces.IUserController;
+import app.menu.AuthMenu;
 import app.menu.interfaces.IMenu;
 import starter.Application;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MyApplication implements Application {
@@ -29,7 +29,7 @@ public class MyApplication implements Application {
 
         instance = this;
 
-        // todo run here auth menu
+        changeMenu(new AuthMenu());
 
     }
 
