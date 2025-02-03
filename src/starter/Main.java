@@ -26,7 +26,7 @@ public class Main {
         IBookController bookController = new BookController(bookRepository);
 
         // starts
-        MyApplication app = new MyApplication(userController, bookController);
+        Application app = new MyApplication(userController, bookController);
         app.start();
 
         // ends
