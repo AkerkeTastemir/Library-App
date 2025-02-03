@@ -5,17 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
+
     private String userId;
+
     private String name;
     private String email;
-    private String phoneNumber;
+    private String password;
+
     private final Map<Book, BookInfo> borrowedBooks;
 
-    public User(String userId, String name, String email, String phoneNumber) {
+    public User(String userId, String name, String email, String password) {
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.password = password;
         this.borrowedBooks = new HashMap<>();
     }
 
@@ -43,12 +46,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Map<Book, BookInfo> getBorrowedBooks() {
