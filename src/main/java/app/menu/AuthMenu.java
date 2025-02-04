@@ -9,8 +9,8 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class AuthMenu implements IMenu {
-
-    private final Scanner scanner = MyApplication.getInstance().getScanner();
+    private final MyApplication app = MyApplication.getInstance();
+    private final Scanner scanner = app.getScanner();
 
     @Override
     public void onEnter() {
@@ -72,7 +72,7 @@ public class AuthMenu implements IMenu {
         User user = new User(
                 UUID.randomUUID().toString(), name, email, password
         );
-        // todo save user from controller
+        app.getUserController().addUser(user);
 
         System.out.println();
         System.out.println("Your user created!");

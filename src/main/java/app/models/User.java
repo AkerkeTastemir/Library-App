@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class User {
 
-    private String userId;
+    private String id;
 
     private String name;
     private String email;
@@ -14,20 +14,20 @@ public class User {
 
     private final Map<Book, BookInfo> borrowedBooks;
 
-    public User(String userId, String name, String email, String password) {
-        this.userId = userId;
+    public User(String id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.borrowedBooks = new HashMap<>();
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

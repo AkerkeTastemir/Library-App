@@ -17,8 +17,10 @@ public class Main {
     public static void main(String[] args) {
 
         IDB db = new PostgresDB("jdbc:postgresql://34.118.52.174:5432", "akerke", "0000", "assignment");
+        db.connect();
+
         // repositories
-        IUserRepository userRepository = new UserRepository();
+        IUserRepository userRepository = new UserRepository(db);
         IBookRepository bookRepository = new BookRepository(db);
 
         // controllers
