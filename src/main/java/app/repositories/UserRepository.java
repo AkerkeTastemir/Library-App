@@ -73,17 +73,42 @@ public class UserRepository implements IUserRepository {
 
             ResultSet resultSet = statement.executeQuery();
 
-            if (!resultSet.next()) {
-                return null;
+            if (resultSet.next()) {
+                return new User(
+                        resultSet.getString("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password")
+                );
             }
 
-            return new User(
-                    resultSet.getString("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("email"),
-                    resultSet.getString("password")
-            );
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Override
+    public User getUserByEmail(String email) {
+        try {
+
+            String sql = "SELECT * FROM users WHERE email = ?;";
+            PreparedStatement statement = database.getConnection().prepareStatement(sql);
+
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return new User(
+                        resultSet.getString("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password")
+                );
+            }
+
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
