@@ -24,6 +24,11 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }

@@ -7,6 +7,7 @@ import java.util.List;
 public interface IUserController {
     void addUser(User user);
     User getUserById(String userId);
+    User getUserByEmail(String email);
     List<User> getAllUsers();
     void updateUser(User user);
     void deleteUser(String userId);

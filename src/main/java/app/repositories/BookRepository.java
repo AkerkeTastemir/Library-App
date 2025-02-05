@@ -39,7 +39,7 @@ public class BookRepository implements IBookRepository {
     }
 
     @Override
-    public boolean addBook(Book book) {
+    public void addBook(Book book) {
         try {
 
             String sql = "INSERT INTO books (" +
@@ -64,7 +64,7 @@ public class BookRepository implements IBookRepository {
     }
 
     @Override
-    public boolean updateBook(Book book) {
+    public void updateBook(Book book) {
         try {
 
             String sql = "UPDATE books SET title = ?, author = ?, category = ?, isAvailable = ? WHERE isbn = ?;";

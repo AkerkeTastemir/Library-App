@@ -4,6 +4,7 @@ import app.controllers.interfaces.IBookController;
 import app.controllers.interfaces.IUserController;
 import app.menu.AuthMenu;
 import app.menu.interfaces.IMenu;
+import app.models.User;
 import starter.Application;
 
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class MyApplication implements Application {
     private final Scanner scanner = new Scanner(System.in);
 
     private IMenu currentMenu;
+    private User user;
 
     public MyApplication(IUserController userController, IBookController bookController) {
         this.userController = userController;
@@ -58,4 +60,11 @@ public class MyApplication implements Application {
         return currentMenu;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
