@@ -1,7 +1,9 @@
 package app.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -12,7 +14,7 @@ public class User {
     private String email;
     private String password;
 
-    private final Map<Book, BookInfo> borrowedBooks;
+    private final HashMap<String, Book> borrowedBooks;
 
     public User(String id, String name, String email, String password) {
         this.id = id;
@@ -20,6 +22,14 @@ public class User {
         this.email = email;
         this.password = password;
         this.borrowedBooks = new HashMap<>();
+    }
+
+    public User(String id, String name, String email, String password, HashMap<String, Book> borrowedBooks) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.borrowedBooks = borrowedBooks;
     }
 
     public String getId() {
@@ -54,31 +64,31 @@ public class User {
         this.password = password;
     }
 
-    public Map<Book, BookInfo> getBorrowedBooks() {
+    public HashMap<String, Book> getBorrowedBooks() {
         return borrowedBooks;
     }
 
-    public void borrowBook(Book book, LocalDate borrowDate, LocalDate returnDate) {
+    public void borrowBook(Book book) {
         if (book.isAvailable()) {
-            borrowedBooks.put(book, new BookInfo(borrowDate, returnDate));
+            borrowedBooks.put(book.getIsbn(), book);
             book.setAvailable(false);
         } else {
             System.out.println("Book \"" + book.getTitle() + "\" is not available.");
         }
     }
 
-    public void returnBook(Book book) {
-        if (borrowedBooks.containsKey(book)) {
-            borrowedBooks.remove(book);
-            book.setAvailable(true);
+    public void returnBook(String isbn) {
+        if (borrowedBooks.containsKey(isbn)) {
+            borrowedBooks.get(isbn).setAvailable(true);
+            borrowedBooks.remove(isbn);
         }
     }
 
     public void checkOverdueBooks() {
         LocalDate today = LocalDate.now();
-        for (Map.Entry<Book, BookInfo> entry : borrowedBooks.entrySet()) {
+        for (Map.Entry<String, Book> entry : borrowedBooks.entrySet()) {
             if (entry.getValue().getReturnDate().isBefore(today)) {
-                System.out.println("Book: " + entry.getKey().getTitle() + ", Return date: " + entry.getValue().getReturnDate());
+                System.out.println("Book: " + entry.getValue().getTitle() + ", Return date: " + entry.getValue().getReturnDate());
             }
         }
     }

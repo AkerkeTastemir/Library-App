@@ -2,13 +2,9 @@ package app.repositories;
 
 import app.data.interfaces.IDB;
 import app.models.Book;
-import app.models.User;
 import app.repositories.interfaces.IBookRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +25,9 @@ public class BookRepository implements IBookRepository {
                     "title VARCHAR(255), " +
                     "author VARCHAR(255), " +
                     "category VARCHAR(255), " +
-                    "isAvailable BOOLEAN);";
+                    "isAvailable BOOLEAN, " +
+                    "borrowDate DATE, " +
+                    "returnDate DATE);";
             PreparedStatement statement = database.getConnection().prepareStatement(sql);
             statement.executeUpdate();
 
@@ -43,10 +41,10 @@ public class BookRepository implements IBookRepository {
         try {
 
             String sql = "INSERT INTO books (" +
-                    "isbn, title, author, category, isAvailable" +
+                    "isbn, title, author, category, isAvailable, borrowDate, returnDate" +
                     ") " +
                     "VALUES (" +
-                    "?, ?, ?, ?, ?" +
+                    "?, ?, ?, ?, ?, ?, ?" +
                     ");";
             PreparedStatement statement = database.getConnection().prepareStatement(sql);
 
@@ -55,6 +53,8 @@ public class BookRepository implements IBookRepository {
             statement.setString(3, book.getAuthor());
             statement.setString(4, book.getCategory());
             statement.setBoolean(5, book.isAvailable());
+            statement.setDate(6, Date.valueOf(book.getBorrowDate()));
+            statement.setDate(7, Date.valueOf(book.getReturnDate()));
 
             statement.executeUpdate();
 
@@ -67,7 +67,7 @@ public class BookRepository implements IBookRepository {
     public void updateBook(Book book) {
         try {
 
-            String sql = "UPDATE books SET title = ?, author = ?, category = ?, isAvailable = ? WHERE isbn = ?;";
+            String sql = "UPDATE books SET title = ?, author = ?, category = ?, isAvailable = ?, borrowDate = ?, returnDate = ? WHERE isbn = ?;";
             PreparedStatement statement = database.getConnection().prepareStatement(sql);
 
             statement.setString(1, book.getTitle());
@@ -75,6 +75,8 @@ public class BookRepository implements IBookRepository {
             statement.setString(3, book.getCategory());
             statement.setBoolean(4, book.isAvailable());
             statement.setString(5, book.getIsbn());
+            statement.setDate(6, Date.valueOf(book.getBorrowDate()));
+            statement.setDate(7, Date.valueOf(book.getReturnDate()));
 
             statement.executeUpdate();
 
@@ -119,7 +121,8 @@ public class BookRepository implements IBookRepository {
                     resultSet.getString("title"),
                     resultSet.getString("author"),
                     resultSet.getString("category"),
-                    resultSet.getBoolean("isAvailable")
+                    resultSet.getDate("borrowDate").toLocalDate(),
+                    resultSet.getDate("returnDate").toLocalDate()
             );
 
         } catch (SQLException e) {
@@ -140,7 +143,8 @@ public class BookRepository implements IBookRepository {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getString("category"),
-                        rs.getBoolean("isAvailable")
+                        rs.getDate("borrowDate").toLocalDate(),
+                        rs.getDate("returnDate").toLocalDate()
                 );
                 books.add(book);
             }

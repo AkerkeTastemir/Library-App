@@ -1,6 +1,8 @@
 package app.repositories;
 
 import app.data.interfaces.IDB;
+import app.models.Book;
+import app.repositories.interfaces.IBookRepository;
 import app.repositories.interfaces.IUserRepository;
 import app.models.User;
 
@@ -8,14 +10,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserRepository implements IUserRepository {
 
     private IDB database;
+    private IBookRepository bookRepository;
 
-    public UserRepository(IDB database) {
+    public UserRepository(IDB database, IBookRepository bookRepository) {
         this.database = database;
+        this.bookRepository = bookRepository;
 
         init();
     }
@@ -53,7 +58,13 @@ public class UserRepository implements IUserRepository {
             statement.setString(2, user.getName());
             statement.setString(3, user.getEmail());
             statement.setString(4, user.getPassword());
-            statement.setString(5, "work");
+
+            StringBuilder sb = new StringBuilder();
+            for (Book book : user.getBorrowedBooks().values()) {
+                sb.append(book.getIsbn()).append(";");
+            }
+
+            statement.setString(5, sb.toString());
 
             statement.executeUpdate();
 
@@ -74,11 +85,26 @@ public class UserRepository implements IUserRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
+                String formatted = resultSet.getString("borrowedBooks");
+                HashMap<String, Book> books = new HashMap<>();
+
+                if (resultSet.getString("borrowedBooks") != null) {
+                    for (String bookIsbn : formatted.split(";")) {
+                        Book book = bookRepository.getBook(bookIsbn);
+                        if (book == null) {
+                            continue;
+                        }
+                        books.put(bookIsbn, book);
+                    }
+                }
+
                 return new User(
                         resultSet.getString("id"),
                         resultSet.getString("name"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        books
                 );
             }
 
@@ -100,11 +126,26 @@ public class UserRepository implements IUserRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
+                String formatted = resultSet.getString("borrowedBooks");
+                HashMap<String, Book> books = new HashMap<>();
+
+                if (resultSet.getString("borrowedBooks") != null) {
+                    for (String bookIsbn : formatted.split(";")) {
+                        Book book = bookRepository.getBook(bookIsbn);
+                        if (book == null) {
+                            continue;
+                        }
+                        books.put(bookIsbn, book);
+                    }
+                }
+
                 return new User(
                         resultSet.getString("id"),
                         resultSet.getString("name"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        books
                 );
             }
 
@@ -125,11 +166,26 @@ public class UserRepository implements IUserRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
+
+                String formatted = resultSet.getString("borrowedBooks");
+                HashMap<String, Book> books = new HashMap<>();
+
+                if (resultSet.getString("borrowedBooks") != null) {
+                    for (String bookIsbn : formatted.split(";")) {
+                        Book book = bookRepository.getBook(bookIsbn);
+                        if (book == null) {
+                            continue;
+                        }
+                        books.put(bookIsbn, book);
+                    }
+                }
+
                 users.add(new User(
                         resultSet.getString("id"),
                         resultSet.getString("name"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        books
                 ));
             }
 
@@ -144,13 +200,21 @@ public class UserRepository implements IUserRepository {
     public void updateUser(User user) {
         try {
 
-            String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?;";
+            String sql = "UPDATE users SET name = ?, email = ?, password = ?, borrowedBooks = ? WHERE id = ?;";
             PreparedStatement statement = database.getConnection().prepareStatement(sql);
 
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
-            statement.setString(4, user.getId());
+
+            StringBuilder sb = new StringBuilder();
+            for (Book book : user.getBorrowedBooks().values()) {
+                sb.append(book.getIsbn()).append(";");
+            }
+
+            statement.setString(4, sb.toString());
+
+            statement.setString(5, user.getId());
 
             statement.executeUpdate();
 

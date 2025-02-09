@@ -128,7 +128,7 @@ public class AuthMenu implements IMenu {
             System.out.println();
 
             app.setUser(user);
-            MyApplication.getInstance().changeMenu(new MainMenu());
+            MyApplication.getInstance().changeMenu(new UserMenu());
 
             break;
         }
