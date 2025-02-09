@@ -23,6 +23,9 @@ public class Book {
         this.returnDate = returnDate;
     }
 
+    public Book(String isbn, String title, String author, int year) {
+    }
+
     public String getIsbn() {
         return isbn;
     }

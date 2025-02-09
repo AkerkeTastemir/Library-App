@@ -1,9 +1,7 @@
 package app.models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -16,7 +14,7 @@ public class User {
 
     private final HashMap<String, Book> borrowedBooks;
 
-    public User(String id, String name, String email, String password) {
+    public User(String id, String name) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -31,6 +29,7 @@ public class User {
         this.password = password;
         this.borrowedBooks = borrowedBooks;
     }
+
 
     public String getId() {
         return id;
