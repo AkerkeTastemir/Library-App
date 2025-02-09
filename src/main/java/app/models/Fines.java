@@ -17,8 +17,8 @@ public class Fines {
 
     public static void calculateAndPrintFines(User user) {
         LocalDate today = LocalDate.now();
-        for (Map.Entry<Book, BookInfo> entry : user.getBorrowedBooks().entrySet()) {
-            Book book = entry.getKey();
+        for (Map.Entry<String, Book> entry : user.getBorrowedBooks().entrySet()) {
+            Book book = entry.getValue();
             LocalDate returnDate = entry.getValue().getReturnDate();
             if (returnDate.isBefore(today)) {
                 double fine = calculateFine(returnDate, today);

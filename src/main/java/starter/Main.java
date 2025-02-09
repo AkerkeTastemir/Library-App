@@ -19,9 +19,14 @@ public class Main {
         IDB db = new PostgresDB("jdbc:postgresql://34.118.52.174:5432", "akerke", "0000", "assignment");
         db.connect();
 
+        if (db.getConnection() == null) {
+            System.out.println("A point");
+            return;
+        }
+
         // repositories
-        IUserRepository userRepository = new UserRepository(db);
         IBookRepository bookRepository = new BookRepository(db);
+        IUserRepository userRepository = new UserRepository(db, bookRepository);
 
         // controllers
         IUserController userController = new UserController(userRepository);
