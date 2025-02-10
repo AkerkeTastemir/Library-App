@@ -85,7 +85,12 @@ public class AdminMenu implements IMenu {
         LocalDate returnDate = borrowDate.plusDays(days);
 
         Book book = new Book(isbn, title, author, category, borrowDate, returnDate);
-        bookController.addBook(book);
+        try {
+            bookController.addBook(book);
+        } catch (Exception e) {
+            System.out.println("Book is exists.");
+            return;
+        };
 
         System.out.println("Book added successfully.");
     }
