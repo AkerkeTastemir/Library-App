@@ -87,6 +87,7 @@ public class UserMenu implements IMenu {
         System.out.print("Enter ISBN of the book to retrieve: ");
         String isbn = scanner.nextLine();
         Book book = app.getBookController().getBookByIsbn(isbn);
+
         if (book != null) {
             System.out.println("Book Details:");
             System.out.println("ISBN: " + book.getIsbn());
